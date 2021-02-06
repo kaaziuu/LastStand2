@@ -9,14 +9,21 @@
 #include "../Tile/Tile.h"
 
 class Map {
+
+public:
     static const int mapWith = 20;
     static const int mapHeight = 20;
-    Tile map[mapHeight][mapWith];
-public:
+
     Map(int level);
     bool isWall(int x, int y, int direction);
+    bool isSpawner(int x, int y);
 
     void display(sf::RenderWindow *Window);
+
+private:
+    Tile map[mapHeight][mapWith];
+
+
 };
 
 

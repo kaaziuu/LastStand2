@@ -12,6 +12,7 @@
 class Tile : public GameObject {
 public:
     bool isWall = false;
+    bool isSpawn = false;
 };
 
 

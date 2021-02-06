@@ -8,12 +8,16 @@
 
 #include "GameObject.h"
 #include "../Stucture/List.h"
+#include "Map/Map.h"
 
 class Physics {
 public:
+    Physics(Map *map);
     void collisionDetection( List<GameObject> *list );
 
     void outTheScreen(List<GameObject> *list);
+private:
+    Map *map = nullptr;
 };
 
 

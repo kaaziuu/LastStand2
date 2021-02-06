@@ -8,8 +8,10 @@
 
 
 void GameObject::display(sf::RenderWindow *window) {
-    this->sprite->setPosition(this->position);
-    window->draw(*this->sprite);
+    if(this->drawable) {
+        this->sprite->setPosition(this->position);
+        window->draw(*this->sprite);
+    }
 }
 
 void GameObject::setTexture(std::string name, int originX, int originY) {
@@ -37,6 +39,7 @@ void GameObject::setPosition(sf::Vector2f position) {
 GameObject::~GameObject() {
     delete this->texture;
     delete this->sprite;
+    delete this->sound;
 }
 
 GameObject *GameObject::update() {}
@@ -46,7 +49,7 @@ void GameObject::setDT(sf::Time dtTime) {
 }
 
 int GameObject::onCollision(GameObject * other) {
-//    std::cout << this->tag<<"->"<< other->tag << std::endl;
+//    std::cout<<"basic" << std::endl;
     return 0;
 }
 

@@ -12,6 +12,8 @@
 #include "Object/Map/Map.h"
 #include "Object/GameObject.h"
 #include "Object/Physics.h"
+#include "Object/Enemy/Spawner.h"
+#include "Object/Menu/Menu.h"
 
 class Game {
 public:
@@ -22,11 +24,14 @@ public:
     void mainLoop();
 
 private:
-    Physics *physics;
+    Physics *physics = nullptr;
+    Spawner *spawner = nullptr;
+    Menu *menu = nullptr;
     sf::RenderWindow *window;
     Player *player = nullptr;
     Map *map = nullptr;
     List<GameObject> *list = new List<GameObject>();
+    int state=0;
 };
 
 

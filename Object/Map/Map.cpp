@@ -31,6 +31,7 @@ Map::Map(int level) {
                 case '2':
                     this->map[lineCt][j].setTexture("Ground/door.png");
                     this->map[lineCt][j].isWall = true;
+                    this->map[lineCt][j].isSpawn = true;
                     break;
 
             }
@@ -55,20 +56,12 @@ void Map::display(sf::RenderWindow *window) {
 bool Map::isWall(int x, int y, int direction) {
     x/=40;
     y/=40;
-    switch (direction) {
-        case 0:
-            y--;
-            break;
-        case 1:
-            y++;
-            break;
-        case 2:
-            x--;
-            break;
-        case 3:
-            x++;
-            break;
-    }
-//    std::cout << x << ":" << y << this->map[y][x].isWall <<std::endl;
+
     return this->map[y][x].isWall;
+}
+
+bool Map::isSpawner(int x, int y) {
+    if(this->map[y][x].isSpawn)
+        return true;
+    return false;
 }

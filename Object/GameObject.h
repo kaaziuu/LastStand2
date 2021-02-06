@@ -23,13 +23,16 @@ public:
     sf::Sprite *getSprite();
     virtual void setDT(sf::Time dt);
     bool toRemove = false;
-    ~GameObject();
+    bool drawable = true;
+    bool isPhysics = true;
+    virtual ~GameObject();
 protected:
     sf::Time dt;
     sf::Texture *texture = nullptr;
     sf::Sprite *sprite = nullptr;
     sf::Vector2f position;
     Sound *sound = nullptr;
+
 };
 
 

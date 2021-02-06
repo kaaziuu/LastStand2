@@ -12,6 +12,7 @@ template<typename T>
 class List {
 public:
     ~List();
+
     void add(T *elem);
 
 
@@ -19,7 +20,7 @@ public:
 
     int getSize();
 
-    T*get(int i);
+    T *get(int i);
 
 private:
     int size;
@@ -94,12 +95,13 @@ T *List<T>::get(int i) {
 template<typename T>
 List<T>::~List() {
     list *current = this->head;
-    while (head)
-    {
+    while (head) {
         head = current->next;
-//        delete current->elem;
-        free(current);
+        delete current;
+//        if(current != nullptr)
+//            free(current);
         current = head;
+
     }
 
 }

@@ -5,53 +5,60 @@
 #include "Player.h"
 #include <iostream>
 #include <math.h>
+#include <filesystem>
 
 Player::Player(int hp, int power, float speed, sf::RenderWindow *window) : Person(hp, power, speed) {
     this->tag = "Player";
     this->window = window;
+    this->heat = new sf::Texture();
+    std::string path = std::filesystem::current_path();
+    path += "/Image/player/heat.png";
+    this->heat->loadFromFile(path);
+
+    this->heatSprite = new sf::Sprite(*this->heat);
+    this->heatSprite->setPosition(0, 0);
 }
 
-void Player::move() {
+void Player::move(int key) {
 //    sf::Keyboard::setVirtualKeyboardVisible(true);
     float rotation = 0;
     float mod = 1;
     sf::Vector2f newPosition = this->position;
     int direction = 0;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !this->keyIsPress) {
+
+    if (key == sf::Keyboard::W && this->lastKey != sf::Keyboard::W ) {
         direction = 0;
-        newPosition.y -= 1;
+        newPosition.y -= 40;
         rotation = 0;
         mod = 2;
-        this->keyIsPress = true;
+        this->lastKey = sf::Keyboard::W;
 
-    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !this->keyIsPress) {
-        newPosition.y += 1;
+    } else if (key == sf::Keyboard::S && this->lastKey != sf::Keyboard::S) {
+        newPosition.y += 40;
         rotation = 180;
         mod = -2;
         direction = 1;
-        this->keyIsPress = true;
+        this->lastKey = sf::Keyboard::S;
 
-    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !this->keyIsPress) {
+    } else if (key == sf::Keyboard::A && this->lastKey != sf::Keyboard::A) {
 
-        newPosition.x -= 1;
+        newPosition.x -= 40;
         rotation -= 90 / mod;
         direction = 2;
-        this->keyIsPress = true;
+        this->lastKey = sf::Keyboard::A;
 
-
-    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !this->keyIsPress) {
-        newPosition.x += 1;
+    } else if (key == sf::Keyboard::D && this->lastKey != sf::Keyboard::D) {
+        newPosition.x += 40;
         rotation += 90 / mod;
         direction = 3;
-        this->keyIsPress = true;
-    }else{
-        this->keyIsPress = false;
+        this->lastKey = sf::Keyboard::D;
     }
 
-    int y = (int) round(position.y);
-    int x = (int) round(position.x);
+    int y = (int) round(newPosition.y);
+    int x = (int) round(newPosition.x);
     if (!this->map->isWall(x, y, direction)) {
         this->position = newPosition;
+
     }
     if (mod != 1 || rotation != 0) {
         this->rotation = rotation;
@@ -59,13 +66,41 @@ void Player::move() {
 }
 
 GameObject *Player::update() {
-    this->move();
+//    this->move();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && this->timeFromLastShot > this->timeDelayBetweenShot) {
         timeFromLastShot = 0;
         return this->gun->shot(this->rotation, this->position);
     }
-    timeFromLastShot += this->dt.asSeconds();
+    this->timeFromLastShot += this->dt.asSeconds();
+    this->timeFromLastHit += this->dt.asSeconds();
     return nullptr;
+}
+
+void Player::resetLastKey() {
+    this->lastKey = -1;
+
+}
+
+Player::~Player()  {
+    delete this->gun;
+    delete this->heat;
+    delete this->heatSprite;
+}
+
+void Player::takeHit(int hp) {
+    Person::takeHit(hp);
+    std::cout << this->hp << std::endl;
+    this->timeFromLastHit = 0;
+    if(this->hp <= 0)
+        this->toRemove = true;
+}
+
+void Player::display(sf::RenderWindow *window) {
+    if(this->timeFromLastHit < this->timeHitTexture) {
+
+        window->draw(*this->heatSprite);
+    }
+    Person::display(window);
 }
 
 

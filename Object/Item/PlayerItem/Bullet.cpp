@@ -29,7 +29,17 @@ Bullet::Bullet(float rotation, sf::Vector2f postion) {
 }
 
 int Bullet::onCollision(GameObject *other) {
-    if(other->tag=="Enemy")
-        other->takeHit(10);
+//    std::cout << other->tag << std::endl;
+    if (other->tag == "Enemy" && !this->used) {
+        this->used = true;
+        other->takeHit(100);
+    }
     return GameObject::onCollision(other);
 }
+
+//int Bullet::onCollision(GameObject *other) {
+//    std::cout << other->tag << std::endl;
+//    if(other->tag=="Enemy")
+//        other->takeHit(10);
+//    return GameObject::onCollision(other);
+//}

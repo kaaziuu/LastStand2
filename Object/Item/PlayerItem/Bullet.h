@@ -9,13 +9,16 @@
 #include "../../GameObject.h"
 
 class Bullet : public GameObject {
+public:
 
     GameObject* update() override;
 
-public:
     Bullet(float rotation, sf::Vector2f postion);
     int onCollision(GameObject *other) override;
+
+
 private:
+    bool used = false;
     const std::string texturePath = "item/gun/bullet.png";
     float speed = 0.7;
     float xSpeed;

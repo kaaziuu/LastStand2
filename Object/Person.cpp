@@ -4,6 +4,7 @@
 
 #include "Person.h"
 #include <string.h>
+#include <iostream>
 
 Person::Person(int hp, int power, float speed)
 :hp{hp}, power{power}, speed{speed}{
@@ -25,15 +26,11 @@ void Person::setMap(Map *map) {
 
 void Person::takeHit(int power){
     this->hp -= power;
-    if(this->tag != "Player")
-    {
-//        toRemove = true;
-        this->tag = "deadEnemy";
-        // TODO : set texture on dead
-    }
-    else{
-        this->toRemove = true;
-    }
+
+}
+
+int Person::getHp() {
+    return this->hp;
 }
 
 

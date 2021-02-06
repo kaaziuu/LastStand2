@@ -18,8 +18,10 @@ class Person : public GameObject {
 public:
     Person(int hp, int power, float speed);
     void display(sf::RenderWindow *window) override;
-    void setMap(Map *map);
+
+    virtual void setMap(Map *map);
     void takeHit(int hp) override;
+    int getHp();
     ~Person();
 protected:
     float rotation = 0;
