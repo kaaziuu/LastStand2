@@ -1,4 +1,4 @@
-# MazeGame
+# LastStand
 # Author Karol Kaźmierczak
 
 Last Stand to projekt gry zriobionej na zaliczenie programowania obiektowego na 2 roku studiów
