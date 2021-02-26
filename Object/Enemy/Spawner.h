@@ -17,7 +17,7 @@ public:
 
  private:
     int spawnCord[4][2];
-    float timeDelay = 0.9;
+    float timeDelay = 1;
     float timeFromLast = 5.1;
     Map *map;
     Player *player;
