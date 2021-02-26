@@ -19,7 +19,7 @@ Player::Player(int hp, int power, float speed, sf::RenderWindow *window) : Perso
     this->heatSprite->setPosition(0, 0);
 }
 
-void Player::move(int key) {
+void Player::move(int key, List<GameObject> *list) {
 //    sf::Keyboard::setVirtualKeyboardVisible(true);
     float rotation = 0;
     float mod = 1;
@@ -56,7 +56,16 @@ void Player::move(int key) {
 
     int y = (int) round(newPosition.y);
     int x = (int) round(newPosition.x);
-    if (!this->map->isWall(x, y, direction)) {
+    bool ok = true;
+    for(int i=0;i< list->getSize(); i++)
+    {
+        GameObject *obj = list->get(i);
+        if(obj->tag == "Enemy" && obj->isCollision(newPosition))
+        {
+            ok= false;
+        }
+    }
+    if (!this->map->isWall(x, y, direction) && ok) {
         this->position = newPosition;
 
     }

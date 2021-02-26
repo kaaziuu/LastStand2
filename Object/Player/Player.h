@@ -8,14 +8,14 @@
 
 #include "../Person.h"
 #include "../Item/PlayerItem/Gun.h"
-
+#include "../../Stucture/List.h"
 class Player : public Person {
 public:
 
     Player(int hp, int power, float speed, sf::RenderWindow * window);
     ~Player() override;
 
-    void move(int key);
+    void move(int key, List<GameObject> *list);
     void resetLastKey();
     void takeHit(int hp) override;
     float timeDelayBetweenShot = 1;

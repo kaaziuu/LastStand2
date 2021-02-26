@@ -75,17 +75,13 @@ void Game::mainLoop() {
                             this->player->score = 0;
                             sf::Vector2f startPositionsPlayer(420, 420);
                             this->player->setPosition(startPositionsPlayer);
-                            for (int i = 0; i < this->list->getSize(); ++i) {
-                                GameObject *obj = this->list->get(i);
-                                if (obj->tag == "Enemy" || obj->tag == "deadEnemy") {
-                                    obj->drawable = false;
-                                    this->list->remove(i);
-                                }
-                            }
+                            delete this->list;
+                            this->list = new List<GameObject>;
+                            this->list->add(this->player);
                             this->state = 0;
                         }
                     } else {
-                        this->player->move(event.key.code);
+                        this->player->move(event.key.code, this->list);
                     }
                 }
                 if (event.type == sf::Event::KeyReleased) {
@@ -118,7 +114,7 @@ void Game::mainLoop() {
             physics->outTheScreen(list);
             for (int i = 0; i < this->list->getSize(); i++) {
                 current = this->list->get(i);
-                if (current && current->tag == "deadEnemy")
+                if (current && current->tag == "deadEnemy" && current->drawable)
                     current->display(window);
             }
             for (int i = 0; i < this->list->getSize(); i++) {
