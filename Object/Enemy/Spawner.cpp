@@ -13,7 +13,7 @@ GameObject *Spawner::update() {
     if (this->timeFromLast > this->timeDelay) {
         this->timeFromLast = 0;
         int i = rand() % 4;
-        enemy = new Enemy(30, 20, 5, this->player, this->map);
+        enemy = new Enemy(30, 20, 5, this->player, this->map, this->list);
         sf::Vector2f position((this->spawnCord[i][0] * 40)-20, this->spawnCord[i][1] * 40 - 20);
         if (position.x == 0)
             position.x += 40;
@@ -32,11 +32,12 @@ GameObject *Spawner::update() {
     return enemy;
 }
 
-Spawner::Spawner(Map *map, Player *player) {
+Spawner::Spawner(Map *map, Player *player, List<GameObject> *list) {
     int ct = 0;
     this->isPhysics = false;
     this->tag == "Spawner";
     this->drawable = true;
+    this->list = list;
     for (int i = 0; i < Map::mapHeight; i++) {
         for (int j = 0; j < Map::mapWith; j++) {
             if (map->isSpawner(j, i)) {

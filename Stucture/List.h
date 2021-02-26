@@ -23,7 +23,7 @@ public:
     T *get(int i);
 
 private:
-    int size;
+    int size=0;
     typedef struct list {
         T *elem;
         struct list *next;
@@ -65,12 +65,14 @@ void List<T>::remove(int i) {
     for (int j = 0; j < i; j++)
         current = current->next;
     if (current->before) {
-        current->before = current->next;
+        current->before->next = current->next;
+        if (current->next)
+            current->next->before = current->before;
     } else {
         this->head = current->next;
+        current->next->before = nullptr;
     }
-    if (current->next)
-        current->next = current->before;
+
     delete current->elem;
     this->size--;
 }

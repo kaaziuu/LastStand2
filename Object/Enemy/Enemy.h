@@ -19,25 +19,24 @@ enum enemyType {
 class Enemy : public Person {
 public:
     Enemy(int hp, int power, float speed, Player *player,
-          Map *map);
+          Map *map, List<GameObject> *list);
 
     GameObject *update() override;
     void setPlayer(Player *player);
     void takeHit(int hp) override;
     bool alive = true;
-
 private:
     Dijkstra *dijkstra;
     int type{};
     float range = 40;
     float timeFromLastAttack = 0.21;
-    float walkTime = 0.3;
+    float walkTime = 0.35;
     float fromLastWalkTIme = 0;
     void knight();
     GameObject *soldier();
     Map *map;
     Player *player = nullptr;
-
+    List<GameObject> *gameList;
 
 };
 

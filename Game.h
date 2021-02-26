@@ -14,6 +14,7 @@
 #include "Object/Physics.h"
 #include "Object/Enemy/Spawner.h"
 #include "Object/Menu/Menu.h"
+#include "Object/Enemy/Enemy.h"
 
 class Game {
 public:
@@ -26,6 +27,7 @@ public:
 private:
     Physics *physics = nullptr;
     Spawner *spawner = nullptr;
+    Sound *backgroundSound = nullptr;
     Menu *menu = nullptr;
     sf::RenderWindow *window;
     Player *player = nullptr;

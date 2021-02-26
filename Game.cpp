@@ -12,15 +12,17 @@
 Game::Game() {
     this->window = new sf::RenderWindow(sf::VideoMode(800, 800), "Last Stand", sf::Style::Titlebar | sf::Style::Close);
     sf::Vector2f startPositionsPlayer(420, 420);
-    this->player = new Player(100, 10, 1, this->window);
+    this->player = new Player(40, 10, 1, this->window);
     this->player->setTexture("player/basicPlayer.png", 8, 8);
     this->player->setPosition(startPositionsPlayer);
     this->list->add(player);
     this->map = new Map(1);
     this->player->setMap(this->map);
     this->physics = new Physics(map);
-    this->spawner = new Spawner(this->map, this->player);
+    this->spawner = new Spawner(this->map, this->player, this->list);
     this->menu = new Menu();
+    this->backgroundSound = new Sound("Soundtrack/mainBackgroundSong.wav");
+    this->backgroundSound->play(true);
 }
 
 Game::~Game() {
@@ -29,6 +31,7 @@ Game::~Game() {
     delete this->map;
     delete this->list;
     delete this->menu;
+    delete this->backgroundSound;
 
 
 }
@@ -42,22 +45,23 @@ void Game::mainLoop() {
     sf::Text score;
     score.setFont(font);
     score.setCharacterSize(16);
-    score.setStyle(sf::Text::Bold );
+    score.setStyle(sf::Text::Bold);
     score.setPosition(40, 40);
     score.setFillColor(sf::Color::White);
     sf::Time dt;
     sf::Text hpText;
     hpText.setFont(font);
     hpText.setCharacterSize(16);
-    hpText.setStyle(sf::Text::Bold );
+    hpText.setStyle(sf::Text::Bold);
     hpText.setPosition(690, 40);
     hpText.setFillColor(sf::Color::White);
     while (this->window->isOpen()) {
         sf::Event event;
-        if(this->state == 0){
+        if (this->state == 0) {
+
             this->state = this->menu->display(window, event);
 
-        }else if(this->state == 1) {
+        } else if (this->state == 1) {
             dt = dClock.restart();
             while (this->window->pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {
@@ -65,8 +69,21 @@ void Game::mainLoop() {
                 }
                 if (event.type == sf::Event::KeyPressed) {
                     if (this->player->toRemove) {
-                        if (event.key.code == sf::Keyboard::Enter)
+                        if (event.key.code == sf::Keyboard::Enter) {
+                            this->player->setHp(40);
+                            this->player->toRemove = false;
+                            this->player->score = 0;
+                            sf::Vector2f startPositionsPlayer(420, 420);
+                            this->player->setPosition(startPositionsPlayer);
+                            for (int i = 0; i < this->list->getSize(); ++i) {
+                                GameObject *obj = this->list->get(i);
+                                if (obj->tag == "Enemy" || obj->tag == "deadEnemy") {
+                                    obj->drawable = false;
+                                    this->list->remove(i);
+                                }
+                            }
                             this->state = 0;
+                        }
                     } else {
                         this->player->move(event.key.code);
                     }
@@ -101,9 +118,15 @@ void Game::mainLoop() {
             physics->outTheScreen(list);
             for (int i = 0; i < this->list->getSize(); i++) {
                 current = this->list->get(i);
-                if (current && current->drawable && current->tag != "Spawner")
+                if (current && current->tag == "deadEnemy")
                     current->display(window);
-
+            }
+            for (int i = 0; i < this->list->getSize(); i++) {
+                current = this->list->get(i);
+                if (current && current->drawable && current->tag != "Spawner" && current->tag != "deadEnemy")
+                    current->display(window);
+                if (current && !current->drawable && current->tag != "Spawner")
+                    list->remove(i);
             }
             if (player->toRemove) {
                 sf::Text text;

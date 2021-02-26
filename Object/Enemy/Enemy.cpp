@@ -7,13 +7,13 @@
 #include <iostream>
 
 Enemy::Enemy(int hp, int power, float speed, Player *player,
-             Map *map) : Person(hp, power, speed) {
+             Map *map, List<GameObject> *list) : Person(hp, power, speed) {
     this->map = map;
     this->player = player;
     this->type = knightType;
     this->tag = "Enemy";
     this->dijkstra = new Dijkstra(this->map);
-
+    this->gameList = list;
 }
 
 
@@ -45,10 +45,10 @@ void Enemy::knight() {
     this->fromLastWalkTIme += this->dt.asSeconds();
 //    std::cout << this->timeFromLastAttack << std::endl;
     if (xDistance <= this->range && yDistance <= this->range && timeFromLastAttack >= this->speed) {
-        std::cout << xDistance << ":" << yDistance << std::endl;
+//        std::cout << xDistance << ":" << yDistance << std::endl;
         this->timeFromLastAttack = 0;
         this->player->takeHit(this->power);
-    } else if (this->fromLastWalkTIme > this->walkTime) {
+    } else if (this->fromLastWalkTIme > this->walkTime && (xDistance >= this->range || yDistance >= this->range)) {
         this->fromLastWalkTIme = 0;
         std::cout << this->tag << std::endl;
         int direction;
@@ -62,7 +62,7 @@ void Enemy::knight() {
             direction = 3;
 
         sf::Vector2f move = this->position;
-        bool ok = false;
+        bool ok = true;
         int ct = 0;
         while (ct<4)
         {
@@ -80,8 +80,22 @@ void Enemy::knight() {
                     move.y += 40;
                     break;
             }
-            if(this->map->isWall(move.x, move.y, -1))
+            for(int i=0;i< this->gameList->getSize();i++)
             {
+                GameObject*obj = this->gameList->get(i);
+                if(obj->tag == "Enemy" || obj->tag=="Player")
+                {
+                    if(obj->isCollision(move)) {
+                        ok = false;
+                        break;
+                    }
+
+                }
+
+            }
+            if(this->map->isWall(move.x, move.y, -1) || !ok)
+            {
+
                 move = this->position;
                 direction++;
                 if(direction>=4)
@@ -119,12 +133,12 @@ char getDirection(int x, int y) {
 
 void Enemy::takeHit(int hp) {
     Person::takeHit(hp);
-    std::cout << "im heat" << std::endl;
     if (this->hp <= 0 && this->alive) {
-        this->player->score += 10;
-        this->tag = "deadEnemy";
+        std::cout << "im heat" << std::endl;
         this->alive = false;
         this->setTexture("Enemy/DeadEnemy.png", 8, 8);
+        this->tag = "deadEnemy";
+        this->player->score += 10;
     }
 }
 

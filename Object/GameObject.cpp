@@ -70,5 +70,11 @@ sf::Sprite *GameObject::getSprite() {
 
 void GameObject::takeHit(int power) {}
 
+bool GameObject::isCollision(sf::Vector2f otherPosition) {
+    if(this->position.x == otherPosition.x && this->position.y == otherPosition.y)
+        return true;
+    return false;
+}
+
 
 

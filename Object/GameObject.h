@@ -17,6 +17,7 @@ public:
     void setTexture(std::string name, int originX=0, int originY=0);
     virtual int onCollision(GameObject *other);
     virtual void takeHit(int power);
+    virtual bool isCollision(sf::Vector2f otherPosition);
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition();
     sf::Vector2f getSize();

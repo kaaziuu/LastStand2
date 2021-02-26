@@ -33,6 +33,11 @@ int Person::getHp() {
     return this->hp;
 }
 
+void Person::setHp(int hp) {
+    this->hp = hp;
+
+}
+
 
 
 

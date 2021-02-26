@@ -20,6 +20,7 @@ public:
     void display(sf::RenderWindow *window) override;
 
     virtual void setMap(Map *map);
+    void setHp(int hp);
     void takeHit(int hp) override;
     int getHp();
     ~Person();

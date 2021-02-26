@@ -9,18 +9,19 @@
 #include "../GameObject.h"
 #include "../Map/Map.h"
 #include "../Player/Player.h"
-
+#include "../../Stucture/List.h"
  class Spawner : public GameObject {
 public:
-    Spawner(Map *map, Player *player);
+    Spawner(Map *map, Player *player, List<GameObject> *list);
     GameObject*update() override;
 
  private:
     int spawnCord[4][2];
-    float timeDelay = 2.5;
+    float timeDelay = 0.9;
     float timeFromLast = 5.1;
     Map *map;
     Player *player;
+    List<GameObject> *list;
 
 };
 
